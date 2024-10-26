@@ -1,5 +1,3 @@
-import com.sun.source.tree.BinaryTree;
-
 import java.util.ArrayList;
 
 public class Students {
@@ -17,14 +15,15 @@ public class Students {
     private Node first;
 
     public Students() {
-    };
+        first = null;
+    }
 
     public void addStudent(BinaryTree nouEstudiant) throws Exception {
         int comparador;
         if (first == null) {
             first = new Node(nouEstudiant, null);
         } else {
-            comparador = first.info.getName().compareToIgnoreCase(nouEstudiant.getName().toLowerCase());
+            comparador = first.info.getName().compareToIgnoreCase(nouEstudiant.getName());
             if (comparador == 0) {
                 throw new Exception("Ja hi ha un alumne amb el mateix nom que : " + first.info.getName());
             } else if (comparador > 0) { //Si el primer nom de la seqüència enllaçada és més gran que el que intento afegir
@@ -54,7 +53,7 @@ public class Students {
         }
         Node aux = first;
         boolean trobat = false;
-        while (aux.seguent != null && !trobat) { // Si el siguiente es nullo o lo ha encontrado y borrado
+        while (aux.seguent != null && !trobat) { // Si el siguiente es null o lo ha encontrado y borrado
             if (aux.seguent.info.getName().equals(name)) {
                 aux.seguent = aux.seguent.seguent;
                 trobat = true;
