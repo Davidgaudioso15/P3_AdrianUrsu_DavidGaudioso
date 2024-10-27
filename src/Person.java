@@ -66,6 +66,13 @@ public class Person {
         return this.name;
     }
 
+    protected void setMaritalStatus(int maritalStatuss) throws Exception {
+        if(maritalStatuss > 0 && maritalStatuss < 5) {
+            this.maritalStatus = maritalStatuss;
+        } else
+            throw new Exception("No es pot setejar l'estat civil: "+maritalStatuss);
+    }
+
     @Override
     public String toString() {
         return "Name: "+this.getName()+
