@@ -161,6 +161,10 @@ public class BinaryTree {
         private void preorderLoad(BufferedReader bur) throws Exception {
             //primeor raiz , despues izquierda y por ultimo derecha
 
+
+            //Si es línea en blanco hay que crear un NodeA sin Persona y hacer preorderLoad en izq y derecha
+
+
             // TODO PREHUNTAR
 
             String line = bur.readLine(); //Llegeix la següent línia = Persona nova de la família
