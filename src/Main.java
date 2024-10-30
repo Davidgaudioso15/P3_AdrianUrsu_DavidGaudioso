@@ -3,7 +3,7 @@ public class Main {
         //System.out.println("Adrian".compareTo("David"));
 
         BinaryTree a = new BinaryTree();
-
+        a.addNode(new Person(1, "Barcelona", "Adrian"),"");
         a.addNode(new Person(2, "Barcelona", "David"),"L");
         a.addNode(new Person(3, "Barcelona", "Rosa"),"R");
         a.addNode(new Person(4, "Barcelona", "Pau"),"LL");
