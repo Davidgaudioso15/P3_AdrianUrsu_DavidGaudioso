@@ -29,7 +29,7 @@ public class BinaryTree {
             }
 
             else if (left == null) {
-                linea += ";";
+                linea += " ;";
             }
             else if (right == null) {
                 linea += " ;";
