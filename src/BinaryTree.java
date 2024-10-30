@@ -70,7 +70,7 @@ public class BinaryTree {
 
         private void displayTreeRecursive(int level) {
 
-            if(level == 1) System.out.println("Arbre binari estructurar:");
+            if(level == 1) System.out.println("Arbre binari estructurat:");
 
             String tabs = "";
 
@@ -158,24 +158,6 @@ public class BinaryTree {
             return count;
         }
 
-        private void preorderLoad(BufferedReader bur) throws Exception {
-            //primeor raiz , despues izquierda y por ultimo derecha
-
-
-            //Si es línea en blanco hay que crear un NodeA sin Persona y hacer preorderLoad en izq y derecha
-
-
-            // TODO PREHUNTAR
-
-            String line = bur.readLine(); //Llegeix la següent línia = Persona nova de la família
-            if (line == null) {
-                return;
-            }
-            this.info = new Person(line);
-            if(this.left != null)  this.left.preorderLoad(bur);
-            if(this.right != null)  this.right.preorderLoad(bur);
-        }
-
     }
 
 
@@ -190,7 +172,9 @@ public class BinaryTree {
         try{
             preorderLoad(bur);
         }
-        catch (Exception e){}
+        catch (Exception e){
+            throw new Exception("No s'ha pogut fer el preorderLoad(bur) al crear l'arbre binari en BinaryTree");
+        }
     }
 
     public String getName() {
@@ -200,10 +184,45 @@ public class BinaryTree {
         return this.root.info.getName();
     }
 
-    private void preorderLoad(BufferedReader bur) throws Exception {
+    private NodeA preorderLoad(BufferedReader bur) throws Exception {
         // hay que llamar al node aqui para buscar por dentro del arbol
+
+        //primeor raiz , despues izquierda y por ultimo derecha
+
+
+        //Si es línea en blanco hay que crear un NodeA sin Persona y hacer preorderLoad en izq y derecha
+
         if(root == null) throw new Exception("Root node is null");
-        preorderLoad(bur);
+
+        String line = bur.readLine(); //Llegeix la següent línia = Persona nova de la família
+        if (line == null) {
+            return null;
+        }
+
+        int punticoma = countChar(';',line);
+
+        if(punticoma == 1) {
+            
+        }
+
+        this.root.info = new Person(line);
+        if(this.left != null)  this.left.preorderLoad(bur);
+        if(this.right != null)  this.right.preorderLoad(bur);
+
+
+        this.root.preorderLoad(bur);
+    }
+
+    private int countChar(char c, String on) {
+        int a = 0;
+        if(on != null) {
+            for(int i = 0;i<on.length();i++) {
+                if(on.charAt(i) == c)
+                    a++;
+            }
+        }
+        return a;
+
     }
 
     public boolean addNode(Person unaPersona, String level) {
