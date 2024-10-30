@@ -20,10 +20,8 @@ public class Person {
     }
 
     public Person(String formattedString) throws IllegalArgumentException {
-        //"Name: Rosa, place of Origin: Barcelona, marital status: Married"
 
-        if(formattedString == null
-                || !formattedString.contains("Name: ")
+        if(        !formattedString.contains("Name: ")
                 || !formattedString.contains("place of Origin: ")
                 || !formattedString.contains("marital status: ")) {
             throw new IllegalArgumentException("ERROR al crear una Persona a partir del string formatejat");
@@ -40,6 +38,18 @@ public class Person {
             case "Single" -> this.maritalStatus = SINGLE;
             default -> this.maritalStatus = WIDOWED;
         }
+    }
+
+    private int countChar(char c, String on) {
+        int a = 0;
+        if(on != null) {
+            for(int i = 0;i<on.length();i++) {
+                if(on.charAt(i) == c)
+                    a++;
+            }
+        }
+        return a;
+
     }
 
     private String getMartialStatusString(int status) {

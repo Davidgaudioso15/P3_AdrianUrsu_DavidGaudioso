@@ -21,6 +21,7 @@ public class BinaryTree {
         }
 
         private void preorderSaveRecursive(BufferedWriter buw) throws IOException {
+
             String linea;
             linea  = this.info.toString();
 
@@ -28,10 +29,10 @@ public class BinaryTree {
                 linea = " ";
             }
 
-            else if (left == null) {
+            if (left == null) {
                 linea += " ;";
             }
-            else if (right == null) {
+            if (right == null) {
                 linea += " ;";
             }
 
@@ -48,9 +49,7 @@ public class BinaryTree {
 
         private boolean addNodeRecursive(Person unaPersona, String level) {
 
-            //level = "L", "R", "LL", "LR", "RL", "RR"
-
-            if(level.length() == 1) {
+            if(level.length() == 1 ) {
                 if (level.charAt(0) == 'L') {
                     if(this.left == null) this.left = new NodeA(unaPersona);
                     return true;
@@ -60,10 +59,12 @@ public class BinaryTree {
                 }
             } else {
                 if (level.charAt(0) == 'L') {
-                    if(this.left != null && this.left.addNodeRecursive(unaPersona, level.substring(1)))
-                        return true;
-                } else if (this.right != null && this.right.addNodeRecursive(unaPersona, level.substring(1)))
-                    return true;
+                    if(this.left == null) this.left = new NodeA(null);
+                    return this.left.addNodeRecursive(unaPersona, level.substring(1));
+                } else {
+                    if(this.right == null) this.right = new NodeA(null);
+                    return this.right.addNodeRecursive(unaPersona, level.substring(1));
+                }
             }
             return false;
         }
@@ -96,7 +97,7 @@ public class BinaryTree {
         private void removePersonRecursive(String name) throws Exception {
 
             //Si volem eliminar a un pare i aquest té almenys un pare o mare, no s'elimina la referència completa, només la Persona
-            if(this.left != null && this.left.info.getName().equals(name)) {
+            if(this.left != null && this.left.info != null && this.left.info.getName().equals(name)) {
                 if(this.left.left != null || this.left.right != null) {
                     this.left.info = null;
                 } else {
@@ -107,7 +108,7 @@ public class BinaryTree {
                 if(this.right != null && this.right.info != null && this.right.info.getMaritalStatus()!=Person.DIVORCED)
                     this.right.info.setMaritalStatus(Person.WIDOWED);
 
-            } else if(this.right != null && this.right.info.getName().equals(name)) {
+            } else if(this.right != null && this.right.info != null && this.right.info.getName().equals(name)) {
                 if(this.right.left != null || this.right.right != null) {
                     this.right.info = null;
                 } else {
@@ -144,11 +145,11 @@ public class BinaryTree {
 
 
         private int countNodesRecursive() {
-            // contamos solo las hojas porque son los que son abuelos
             int count = 0;
 
-           // si el this.info != null
-            // es hacer el cunt de todos - el root y menos los padres
+            if(this.info != null){
+                count = 1;
+            }
             if (this.left != null) {
                 count += this.left.countNodesRecursive();
             }
@@ -167,59 +168,52 @@ public class BinaryTree {
     public BinaryTree(){
         root = null;
     }
-    public BinaryTree(String filename) throws Exception { // hay que llmar al PreorderLoad
-        BufferedReader bur = new BufferedReader(new FileReader(filename));
-        try{
-            preorderLoad(bur);
-        }
-        catch (Exception e){
-            throw new Exception("No s'ha pogut fer el preorderLoad(bur) al crear l'arbre binari en BinaryTree");
-        }
+    public BinaryTree(String filename) throws Exception {
+        BufferedReader bur = new BufferedReader(new FileReader("src/Files/"+filename));
+        this.root = preorderLoad(bur);
     }
 
     public String getName() {
         if (this.root == null || this.root.info == null) {
-            return null; // o un valor predeterminado, como ""
+            return null;
         }
         return this.root.info.getName();
     }
 
     private NodeA preorderLoad(BufferedReader bur) throws Exception {
-        // hay que llamar al node aqui para buscar por dentro del arbol
 
-        //primeor raiz , despues izquierda y por ultimo derecha
-
-
-        //Si es línea en blanco hay que crear un NodeA sin Persona y hacer preorderLoad en izq y derecha
-
-        if(root == null) throw new Exception("Root node is null");
-
-        String line = bur.readLine(); //Llegeix la següent línia = Persona nova de la família
+        String line = bur.readLine();
         if (line == null) {
             return null;
         }
 
-        int punticoma = countChar(';',line);
+        NodeA nod = null;
+        int cont = countChar(';', line);
+        line = esborrapunticoma(line);
 
-        //; ; no continua
-        //; dreta
-        // no hi ha ;, segueix esquerra
-        // no hi ha línia, només un " ", es una Persona morta pero segueix per l'esquerra
-
-        if(punticoma == 1) {
-
+        if (line.equals(" ")) {
+            nod = new NodeA(null);
+        } else {
+            line = line.trim();
+            Person person = new Person(line);
+            nod = new NodeA(person);
         }
 
-        /*
-        this.root.info = new Person(line);
-        if(this.left != null)  this.left.preorderLoad(bur);
-        if(this.right != null)  this.right.preorderLoad(bur);
-
-
-        this.root.preorderLoad(bur);
-
-         */
-        return null;
+        if (cont == 0) {
+            nod.left = preorderLoad(bur);
+            nod.right = preorderLoad(bur);
+        }
+        else if (cont == 1) {
+            nod.left = preorderLoad(bur);
+            nod.right = null;
+        } else if (cont == 2) {
+            nod.left = null;
+            nod.right = null;
+        } else {
+            System.out.println(line);
+            throw new Exception("Format de línia no vàlid");
+        }
+        return nod;
     }
 
     private int countChar(char c, String on) {
@@ -234,17 +228,20 @@ public class BinaryTree {
 
     }
 
+    private String esborrapunticoma(String e) {
+        return e.replace(";","");
+    }
+
     public boolean addNode(Person unaPersona, String level) {
 
-        if(this.root == null && level.equals("")) {
+        if(this.root == null && level.isEmpty()) {
             this.root = new NodeA( unaPersona,null, null);
             return true;
         }
 
-        if(unaPersona != null && !level.isEmpty() && level.length() < 3 && ( level.charAt(0) == 'L' || level.charAt(0) == 'R' )) {
-
-            return this.root.addNodeRecursive(unaPersona,level);
-
+        if( !level.isEmpty() && level.length() < 3 && ( level.charAt(0) == 'L' || level.charAt(0) == 'R' )) {
+            if(this.root != null)
+                return this.root.addNodeRecursive(unaPersona,level);
         }
         return false;
     }
@@ -258,13 +255,14 @@ public class BinaryTree {
 
     public void preorderSave() throws Exception {
         if(root == null) throw new Exception("Aquest arbre esta buit");
-        File f = new File("src/Files/" + root.info.getName() + ".txt");
-        BufferedWriter bur = new BufferedWriter(new FileWriter(f));
+        FileWriter f = new FileWriter("src/Files/" + root.info.getName() + ".txt");
+        BufferedWriter bur = new BufferedWriter(f);
         try{
             root.preorderSaveRecursive(bur);
+            bur.close();
         }
         catch (Exception e){
-            bur.close();
+            throw new Exception("No s'ha pogut fer el preorderSave() de la classe BinaryTree");
         }
     }
 
@@ -294,10 +292,12 @@ public class BinaryTree {
         }
         else{
             if(root.left != null){
-                count += 1;
+                if(root.left.info != null)
+                    count += 1;
             }
             if(root.right != null){
-                count += 1;
+                if(root.right.info != null)
+                    count += 1;
             }
         }
         return count;
@@ -307,13 +307,13 @@ public class BinaryTree {
         if(root == null){
             return 0;
         }
-        return root.countNodesRecursive();
+        return root.countNodesRecursive()-howManyParents()-1;
     }
 
     public boolean marriedParents() {
         //Aquest mètode comprova si ambdós
         // progenitors de l'estudiant (tant l'esquerra com la dreta) estan casats.
-        if(root == null && (this.root.left == null || this.root.right == null)) {
+        if(root == null || (this.root.left == null || this.root.right == null) || (this.root.left.info == null || this.root.right.info == null)) {
             return false;
         }
 

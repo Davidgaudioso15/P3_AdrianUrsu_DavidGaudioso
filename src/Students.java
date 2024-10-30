@@ -19,19 +19,21 @@ public class Students {
     }
 
     public void addStudent(BinaryTree nouEstudiant) throws Exception {
+        System.out.println("Anem a afegir en: "+nouEstudiant.getName());
         int comparador;
         if (first == null) {
             first = new Node(nouEstudiant, null);
         } else {
             comparador = first.info.getName().compareToIgnoreCase(nouEstudiant.getName());
             if (comparador == 0) {
-                throw new Exception("Ja hi ha un alumne amb el mateix nom que : " + first.info.getName());
+                throw new Exception("JJa hi ha un alumne amb el mateix nom que : " + first.info.getName());
             } else if (comparador > 0) { //Si el primer nom de la seqüència enllaçada és més gran que el que intento afegir
                 first = new Node(nouEstudiant, first);
             } else {
                 Node aux = first;
                 while (aux.seguent != null) {
                     comparador = aux.seguent.info.getName().compareToIgnoreCase(nouEstudiant.getName());
+                    System.out.println("Comparo : " + aux.seguent.info.getName() + " amb en " +nouEstudiant.getName());
                     if (comparador == 0) {
                         throw new Exception("Ja hi ha un alumne amb el mateix nom que : " + aux.seguent.info.getName());
                     } else if (comparador < 0) { // Si el nom seguent és més petit que el que li paso tindrà que avançar un lloc
@@ -87,7 +89,7 @@ public class Students {
         }
         Node aux = first;
         while (aux != null){
-            list.add(aux.info.toString());
+            list.add(aux.info.getName());
             aux = aux.seguent;
         }
         return list;
