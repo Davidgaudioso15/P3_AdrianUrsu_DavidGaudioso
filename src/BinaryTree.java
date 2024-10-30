@@ -146,9 +146,9 @@ public class BinaryTree {
         private int countNodesRecursive() {
             // contamos solo las hojas porque son los que son abuelos
             int count = 0;
-            if (this.left == null && this.right == null) {
-                return 1;
-            }
+
+           // si el this.info != null
+            // es hacer el cunt de todos - el root y menos los padres
             if (this.left != null) {
                 count += this.left.countNodesRecursive();
             }
