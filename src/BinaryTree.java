@@ -75,7 +75,7 @@ public class BinaryTree {
             String tabs = "";
 
             for(int i = 0;i<level;i++)
-                tabs = tabs + "   ";
+                tabs = tabs + "      ";
 
             if(this.info != null)
                 System.out.println(tabs + this.info.getName());
@@ -201,16 +201,25 @@ public class BinaryTree {
 
         int punticoma = countChar(';',line);
 
+        //; ; no continua
+        //; dreta
+        // no hi ha ;, segueix esquerra
+        // no hi ha línia, només un " ", es una Persona morta pero segueix per l'esquerra
+
         if(punticoma == 1) {
-            
+
         }
 
+        /*
         this.root.info = new Person(line);
         if(this.left != null)  this.left.preorderLoad(bur);
         if(this.right != null)  this.right.preorderLoad(bur);
 
 
         this.root.preorderLoad(bur);
+
+         */
+        return null;
     }
 
     private int countChar(char c, String on) {
@@ -226,6 +235,11 @@ public class BinaryTree {
     }
 
     public boolean addNode(Person unaPersona, String level) {
+
+        if(this.root == null && level.equals("")) {
+            this.root = new NodeA( unaPersona,null, null);
+            return true;
+        }
 
         if(unaPersona != null && !level.isEmpty() && level.length() < 3 && ( level.charAt(0) == 'L' || level.charAt(0) == 'R' )) {
 
