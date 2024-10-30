@@ -22,12 +22,16 @@ public class BinaryTree {
 
         private void preorderSaveRecursive(BufferedWriter buw) throws IOException {
             String linea;
-            linea = "Name"+ root.info.getName()+", place of Origin:"+ root.info.getPlaceOfOrigin()+", marital status:"+ root.info.getMaritalStatus();
+            linea  = this.info.toString();
 
-            if (left == null) {
+            if(linea == null){
+                linea = " ";
+            }
+
+            else if (left == null) {
                 linea += ";";
             }
-            if (right == null) {
+            else if (right == null) {
                 linea += " ;";
             }
 
