@@ -9,34 +9,16 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-       /*
-        //System.out.println("Adrian".compareTo("David"));
 
-        BinaryTree a = new BinaryTree();
-
-
-        a.addNode(new Person(1, "Barcelona", "Adrian"), "");
-        a.addNode(new Person(3, "Barcelona", "David"), "L");
-        a.addNode(new Person(3, "Barcelona", "Rosa"), "R");
-        a.addNode(null, "R");
-        a.addNode(new Person(4, "Barcelona", "Pau"), "LL");
-        // a.addNode(new Person(1, "Barcelona", "Maria"),"RL");
-        // a.addNode(new Person(2, "Barcelona", "Laura"),"RL"); //addNode no permet sobreescriure avis
-        // a.addNode(new Person(3, "Barcelona", "Marta"),"RR");
-        // a.addNode(new Person(3, "Barcelona", "Aurelio"),"LR");
-
-        a.displayTree();
-        a.preorderSave();
-
-        BinaryTree b = new BinaryTree("src/Files/Adrian.txt");
-        */
         try {
             Main main = new Main();
             Students studentsList = main.readAllStudents("src/Files");
+
             main.mostrarMenu(studentsList);
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("No s'ha pogut llegir els fitxers dels estudiants o mostrar el menú del main");
         }
 
     }
@@ -75,10 +57,11 @@ public class Main {
                             mostrarInforme(studentsList);
                             break;
                         case 6:
-                            System.out.println("Guardando el archivo y saliendo");
+                            System.out.println("Sortint del programa");
                             saveAllStudents(studentsList);
+                            break;
                         default:
-                            System.out.println("Opció no vàlida. Si us plau, tria una opció entre 1 i 3.");
+                            System.out.println("Opció no vàlida. Si us plau, tria una opció entre 1 i 6.");
                     }
                 } else {
                     System.out.println("Si us plau, introdueix un número vàlid.");
@@ -137,23 +120,23 @@ public class Main {
     private void showStudentFamily(Students studentsList) throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Introdúceme el nombre del estudiante: ");
+            System.out.println("Introdueix el nom de l'estudiant: ");
             String nombre = scanner.nextLine();
             BinaryTree students = studentsList.getStudent(nombre);
             students.displayTree();
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("No es pot mostrar la família perquè no existeix l'estudiant");
         }
     }
     private void addNewStudent(Students studentsList) throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Introdúceme el nombre del estudiante: ");
+            System.out.println("Introdueix el nom l'estudiant: ");
             String nombre = scanner.nextLine();
-            System.out.println("Introdúceme el origen del estudiante: ");
+            System.out.println("Introdueix l'origen de l'estudiant: ");
             String origen = scanner.nextLine();
-            System.out.println("Introdúceme el estado civil del estudiante: ");
+            System.out.println("Introdueix l'estat civil l'estudiant: ");
             int estado = scanner.nextInt();
             Person person = new Person(estado, origen,nombre);
             BinaryTree arbol = new BinaryTree();
@@ -167,35 +150,38 @@ public class Main {
     private void modifyStudent(Students studentsList) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Introdúceme el nombre del estudiante: ");
+        System.out.println("Introdueix el nom de l'estudiant: ");
         String nombre = scanner.nextLine();
         BinaryTree students = studentsList.getStudent(nombre);
 
         if (students != null) {
-            System.out.println("Pon 1 si queires añadir: ");
-            System.out.println("Pon 2 si quieres eliminar: ");
+            System.out.println("Posa el número 1 si vols afegir: ");
+            System.out.println("Posa el número 2 si vols eliminar: ");
             int estado = scanner.nextInt();
             scanner.nextLine();
             if (estado == 1) {
-                System.out.println("Introdúceme el nombre del familiar: ");
+
+                System.out.println("Introdueix la posicio en l'arbre (e.g., L, R, LL, LR): ");
+                String posicion = scanner.nextLine();
+                posicion = posicion.toUpperCase();
+
+                System.out.println("Introdueixme el nom del familiar: ");
                 String nombrefamiliarañadir = scanner.nextLine();
-                System.out.println("Introdúceme el origen del familiar: ");
+                System.out.println("Introdueixme l'origen del familiar: ");
                 String origenfamiliarañadir = scanner.nextLine();
-                System.out.println("Introdúceme el estado civil del familiar: ");
+                System.out.println("Introdueixme e l'estat civil del familiar: ");
                 int estadofamiliarañadir = scanner.nextInt();
                 Person person = new Person(estadofamiliarañadir, origenfamiliarañadir, nombrefamiliarañadir);
 
-                System.out.println("Introduce la posición en el árbol (e.g., L, R, LL, LR): ");
-                String posicion = scanner.nextLine();
-                posicion = posicion.toUpperCase();
+
                 try {
                     students.addNode(person, posicion);
                 } catch (Exception e) {
-                    System.out.println("Error ----- " + e.getMessage());
+                    System.out.println("Error al afegir una persona en una posició de l'arbre familiar");
                 }
 
             } else {
-                System.out.println("Introdúceme el nombre del familiar: ");
+                System.out.println("Introdueixme el nom del familiar: ");
                 String nombrefamiliareliminar = scanner.nextLine();
 
                 try {
@@ -204,39 +190,65 @@ public class Main {
                     System.out.println("Error" + e.getMessage());
                 }
             }
-        } else System.out.println("No se encontró ningún estudiante con ese nombre.");
+        } else System.out.println("No se s'ha trobat cap estuidant amb aquest nom: "+nombre);
 
     }
 
     private void mostrarInforme(Students studentsList){
 
-        /*
+        Scanner scanner = new Scanner(System.in);
 
-        Tria una opció: 5
-        Indica la ciutat de naixement a buscar:
-        Barcelona
-        Indica la ciutat de procedència a buscar:
-        Girona
-        Nombre d'alumnes totals: 6
-        Hi ha 2 alumnes de Barcelona
-        Hi ha 3 alumnes descendents de Girona
-        Hi ha 2 alumnes amb un únic progenitor.
-        Hi ha 3 alumnes amb progenitors no casats.
-        Hi ha 5 alumnes amb dos o més avis o àvies.
+        System.out.println("Indica la ciutat de naixement a buscar:");
+        String ciutatNaixement = scanner.nextLine();
 
-         */
+        System.out.println("Indica la ciutat de procedència a buscar:");
+        String ciutatProcedencia = scanner.nextLine();
 
-        /*
-        ArrayList<String> a = null;
+        int totalEstudiants = 0;
+        int countCiutatNaixement = 0;
+        int countDescendentsProcedencia = 0;
+        int countUnicoProgenitor = 0;
+        int countNoCasats = 0;
+        int countAmbAvis = 0;
 
-        a = studentsList.getAllStudentsName();
+        ArrayList<String> allStudentNames = studentsList.getAllStudentsName();
 
-        for (String s : a) {
-            BinaryTree b = studentsList.getStudent(s);
+        if (allStudentNames == null) {
+            System.out.println("No hay estudiantes registrados.");
+            return;
         }
 
-         */
+        for (String studentName : allStudentNames) {
+            BinaryTree estudiantTree = studentsList.getStudent(studentName);
+            totalEstudiants++;
 
+            if (estudiantTree.isFrom(ciutatNaixement)) {
+                countCiutatNaixement++;
+            }
+
+            if (estudiantTree.isDescent(ciutatProcedencia)) {
+                countDescendentsProcedencia++;
+            }
+
+            if (estudiantTree.howManyParents() == 1) {
+                countUnicoProgenitor++;
+            }
+
+            if (!estudiantTree.marriedParents()) {
+                countNoCasats++;
+            }
+
+            if (estudiantTree.howManyGrandParents() >= 2) {
+                countAmbAvis++;
+            }
+        }
+
+        System.out.println("Nombre d'alumnes totals: " + totalEstudiants);
+        System.out.println("Hi ha " + countCiutatNaixement + " alumnes de " + ciutatNaixement);
+        System.out.println("Hi ha " + countDescendentsProcedencia + " alumnes descendents de " + ciutatProcedencia);
+        System.out.println("Hi ha " + countUnicoProgenitor + " alumnes amb un únic progenitor.");
+        System.out.println("Hi ha " + countNoCasats + " alumnes amb progenitors no casats.");
+        System.out.println("Hi ha " + countAmbAvis + " alumnes amb dos o més avis o àvies.");
     }
 
 

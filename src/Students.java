@@ -19,33 +19,35 @@ public class Students {
     }
 
     public void addStudent(BinaryTree nouEstudiant) throws Exception {
-        System.out.println("Anem a afegir en: "+nouEstudiant.getName());
         int comparador;
         if (first == null) {
             first = new Node(nouEstudiant, null);
         } else {
             comparador = first.info.getName().compareToIgnoreCase(nouEstudiant.getName());
             if (comparador == 0) {
-                throw new Exception("JJa hi ha un alumne amb el mateix nom que : " + first.info.getName());
+                throw new Exception("ERR 1 - Ja hi ha un alumne amb el mateix nom que : " + first.info.getName());
             } else if (comparador > 0) { //Si el primer nom de la seqüència enllaçada és més gran que el que intento afegir
                 first = new Node(nouEstudiant, first);
             } else {
                 Node aux = first;
-                while (aux.seguent != null) {
+                boolean seg = true;
+                while (aux.seguent != null && seg) {
                     comparador = aux.seguent.info.getName().compareToIgnoreCase(nouEstudiant.getName());
-                    System.out.println("Comparo : " + aux.seguent.info.getName() + " amb en " +nouEstudiant.getName());
                     if (comparador == 0) {
-                        throw new Exception("Ja hi ha un alumne amb el mateix nom que : " + aux.seguent.info.getName());
+                        throw new Exception("ERR 2 - Ja hi ha un alumne amb el mateix nom que : " + aux.seguent.info.getName());
                     } else if (comparador < 0) { // Si el nom seguent és més petit que el que li paso tindrà que avançar un lloc
                         aux = aux.seguent;
                     } else { // Si el nom seguent és més gran l'afegeixo
                         aux.seguent = new Node(nouEstudiant, aux.seguent);
+                        seg = false; //No segueixo afegint
                     }
                 }
                 aux.seguent = new Node(nouEstudiant, null); // Si es el més gran de tots
             }
 
         }
+        System.out.println("Alumne carregat des del fitxer: "+nouEstudiant.getName()+".txt");
+        nouEstudiant.displayTree();
 
     }
 
@@ -62,7 +64,7 @@ public class Students {
             } else { // Si no la encontrado
                 aux = aux.seguent;
             }
-            //Tratamos el primero element al final al no tener cabezera.
+            //Tratamos el primero element al final al no tener cabecera.
             if (first.info.getName().equals(name))
                 first = first.seguent;
         }

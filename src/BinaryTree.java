@@ -23,7 +23,10 @@ public class BinaryTree {
         private void preorderSaveRecursive(BufferedWriter buw) throws IOException {
 
             String linea;
-            linea  = this.info.toString();
+            if(this.info != null)
+                linea  = this.info.toString();
+            else
+                linea = null;
 
             if(linea == null){
                 linea = " ";
@@ -130,15 +133,18 @@ public class BinaryTree {
         }
 
         private boolean isDescentFromRecursive(String place) {
-            //preodre
-            if(this.info.getPlaceOfOrigin().equals(place)) {
+
+            if(this.info!=null) {
+                if (this.info.getPlaceOfOrigin().equals(place)) {
+                    return true;
+                }
+            }
+            if (this.left != null && this.left.isDescentFromRecursive(place)) {
                 return true;
             }
-            if(this.left != null) {
-                return this.left.isDescentFromRecursive(place);
-            }
-            if(this.right != null) {
-                return this.right.isDescentFromRecursive(place);
+
+            if (this.right != null && this.right.isDescentFromRecursive(place)) {
+                return true;
             }
             return false;
         }
@@ -171,6 +177,7 @@ public class BinaryTree {
     public BinaryTree(String filename) throws Exception {
         BufferedReader bur = new BufferedReader(new FileReader("src/Files/"+filename));
         this.root = preorderLoad(bur);
+
     }
 
     public String getName() {
@@ -283,8 +290,15 @@ public class BinaryTree {
         if(root == null){
             return false;
         }
-        return root.isDescentFromRecursive(place);
+        if (root.left != null && root.left.isDescentFromRecursive(place)) {
+            return true;
+        }
+        if (root.right != null && root.right.isDescentFromRecursive(place)) {
+            return true;
+        }
+        return false;
     }
+
     public int howManyParents() {
         int count = 0;
         if(root == null) {
@@ -311,8 +325,6 @@ public class BinaryTree {
     }
 
     public boolean marriedParents() {
-        //Aquest mètode comprova si ambdós
-        // progenitors de l'estudiant (tant l'esquerra com la dreta) estan casats.
         if(root == null || (this.root.left == null || this.root.right == null) || (this.root.left.info == null || this.root.right.info == null)) {
             return false;
         }
