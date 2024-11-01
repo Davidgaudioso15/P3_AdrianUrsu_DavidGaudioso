@@ -1,23 +1,16 @@
-import org.w3c.dom.Node;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         try {
             Main main = new Main();
             Students studentsList = main.readAllStudents("src/Files");
-
             main.mostrarMenu(studentsList);
         }
         catch (Exception e) {
-            e.printStackTrace();
             System.out.println("No s'ha pogut llegir els fitxers dels estudiants o mostrar el menú del main");
         }
 
@@ -70,7 +63,7 @@ public class Main {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error en el mostrarmenu() del main: " + e.getMessage());
         }
     }
 
@@ -93,7 +86,7 @@ public class Main {
 
     private void saveAllStudents(Students studentsList) throws Exception {
 
-        ArrayList<String> a = null;
+        ArrayList<String> a;
 
         a = studentsList.getAllStudentsName();
 
@@ -117,7 +110,7 @@ public class Main {
     }
 
 
-    private void showStudentFamily(Students studentsList) throws Exception {
+    private void showStudentFamily(Students studentsList) {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Introdueix el nom de l'estudiant: ");
@@ -129,7 +122,7 @@ public class Main {
             System.out.println("No es pot mostrar la família perquè no existeix l'estudiant");
         }
     }
-    private void addNewStudent(Students studentsList) throws Exception {
+    private void addNewStudent(Students studentsList) {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Introdueix el nom l'estudiant: ");
@@ -147,7 +140,7 @@ public class Main {
             System.out.println("Error"+e.getMessage());
         }
     }
-    private void modifyStudent(Students studentsList) throws Exception {
+    private void modifyStudent(Students studentsList) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Introdueix el nom de l'estudiant: ");
@@ -165,11 +158,11 @@ public class Main {
                 String posicion = scanner.nextLine();
                 posicion = posicion.toUpperCase();
 
-                System.out.println("Introdueixme el nom del familiar: ");
+                System.out.println("Introdueix el nom del familiar: ");
                 String nombrefamiliarañadir = scanner.nextLine();
-                System.out.println("Introdueixme l'origen del familiar: ");
+                System.out.println("Introdueix l'origen del familiar: ");
                 String origenfamiliarañadir = scanner.nextLine();
-                System.out.println("Introdueixme e l'estat civil del familiar: ");
+                System.out.println("Introdueix l'estat civil del familiar: ");
                 int estadofamiliarañadir = scanner.nextInt();
                 Person person = new Person(estadofamiliarañadir, origenfamiliarañadir, nombrefamiliarañadir);
 
@@ -181,7 +174,7 @@ public class Main {
                 }
 
             } else {
-                System.out.println("Introdueixme el nom del familiar: ");
+                System.out.println("Introdueix el nom del familiar: ");
                 String nombrefamiliareliminar = scanner.nextLine();
 
                 try {
@@ -214,7 +207,7 @@ public class Main {
         ArrayList<String> allStudentNames = studentsList.getAllStudentsName();
 
         if (allStudentNames == null) {
-            System.out.println("No hay estudiantes registrados.");
+            System.out.println("No hay estudiants registrats.");
             return;
         }
 
